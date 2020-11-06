@@ -1,0 +1,75 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Society Splash</title>
+    <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+          'Helvetica Neue', sans-serif;
+        height: 100vh;
+        margin: 0;
+        flex-direction: column;
+        background: #121619;
+        color: white;
+      }
+
+      button {
+        padding: 10px 20px;
+        border-radius: 10px;
+        font-size: 80%;
+        background: rgba(255, 255, 255, 0.05);
+        border: none;
+        color: white;
+        cursor: pointer;
+        transition: all 0.2s cubic-bezier(0.86, 0.27, 0.15, 0.79);
+        outline: none;
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans',
+          'Helvetica Neue', sans-serif;
+      }
+
+      button:hover {
+        background: #6bd44b;
+        color: #245815;
+      }
+
+      button:active {
+        transform: scale(1.5);
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Download Society Splash</h1>
+    <button>Download</button>
+    <script>
+      const repo = 'society-splash-releases';
+      const platformCheck = () => {
+        const platform = navigator.platform.toLowerCase();
+        if (platform.includes('mac')) return 'mac';
+        if (platform.includes('win')) return 'win';
+        return false;
+      };
+
+      document.querySelector('button').addEventListener('click', async e => {
+        const platform = platformCheck();
+        if (!platform) return (e.target.className = 'active error');
+
+        e.target.classList.add('active');
+        const req = await fetch(`https://api.github.com/repos/alii/${repo}/releases/latest`);
+        const res = await req.json();
+        const version = res.name;
+
+        if (!version) return alert('Something went wrong.');
+
+        let path = `Society-Splash-Setup-${version}.exe`;
+        if (platform === 'mac') path = `Society-Splash-${version}.dmg`;
+        window.location = `https://github.com/alii/${repo}/releases/download/v${version}/${path}`;
+      });
+    </script>
+  </body>
+</html>
